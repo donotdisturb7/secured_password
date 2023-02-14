@@ -1,0 +1,5 @@
+darkdetect
+customtkinter
+sqlite3
+string
+random
