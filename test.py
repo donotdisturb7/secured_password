@@ -1,4 +1,4 @@
-from impo import * 
+from requirments import * 
 
 
 customtkinter.set_appearance_mode("dark")
@@ -39,12 +39,29 @@ class MyTabView(customtkinter.CTkTabview):
         self.refresh_button.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
         self.passwords = {}
-
     def generate_password(self):
-        password = ''.join(random.choices(string.ascii_letters + string.digits + string.punctuation, k=5))#nbr_char))
-        self.password_entry.delete(0, END)
-        self.password_entry.insert(0, password)
-        #nbr_char = int(nbr_char_entry.cget(password))
+        password_length = self.entry1.get()
+        # ,text="Hello, world!", fg_color="white")
+        self.label = customtkinter.CTkLabel(
+            master=self.tab("Generer un mot de passe"))
+        if not password_length:
+            # si l'utilisateur n'a rien saisi, afficher un message d'erreur
+            # ,fg_color="white")
+            self.label.configure(
+                text="Veuillez saisir une longueur de mot de passe valide")
+            self.label.grid(row=0, column=0)
+        else:
+            password_length = int(password_length)
+            password = ''.join(random.choices(
+                string.ascii_letters + string.digits + string.punctuation, k=password_length))
+            # self.label.configure(text = "password")
+            self.password_entry.delete(0, END)
+            self.password_entry.insert(0, password)
+    # def generate_password(self):
+    #     password = ''.join(random.choices(string.ascii_letters + string.digits + string.punctuation, k=5))#nbr_char))
+    #     self.password_entry.delete(0, END)
+    #     self.password_entry.insert(0, password)
+    #     #nbr_char = int(nbr_char_entry.cget(password))
 
     def save_password(self):
         password_name = simpledialog.askstring("Nom du mot de passe", "Entrez le nom du mot de passe à enregistrer", parent=self.master)
