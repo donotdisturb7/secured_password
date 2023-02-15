@@ -8,14 +8,19 @@ customtkinter.set_appearance_mode("dark")
 
 
 class MyTabView(customtkinter.CTkTabview):
-    def __init__(self, master, **kwargs):
-        super().__init__(master, **kwargs)
+
 
         # creation des tabs
+        
+        # ajouter des élements aux tabsclass MyTabView(customtkinter.CTkTabview):
+    def __init__(self, master=None, **kw):
+        super().__init__(master=master, **kw)
         self.add("Home")
         self.add("Generer un mot de passe")
+        self.add("Afficher les mots de passe")
+        self.add("Modifier un mot de passe")
+        self.add("Supprimer un mot de passe")
         self.add("Mes mots de passes")
-        # ajouter des élements aux tabs
 
         text_var = tk.StringVar(value=0)
         self.label1 = customtkinter.CTkLabel(master=self.tab(
@@ -40,7 +45,7 @@ class MyTabView(customtkinter.CTkTabview):
 
         self.entry1 = customtkinter.CTkEntry(master=self.tab(
             "Generer un mot de passe"), textvariable=text_var, width=120, height=25, fg_color=("white", "gray75"), corner_radius=8)
-        self.entry1.place(x=155, y=160)
+        self.entry1.place(x=155, y=500)
 
     def generate_password(self):
         password_length = self.entry1.get()
@@ -67,7 +72,7 @@ class App(customtkinter.CTk):
         super().__init__()
         self.title("Secured Password ")
         # self.geometry("900")
-        self.minsize(400, 400)
+        self.minsize(500, 400)
         self.tab_view = MyTabView(master=self)
         self.tab_view.grid(row=0, column=0, padx=0, pady=0)
 

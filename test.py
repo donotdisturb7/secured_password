@@ -1,6 +1,5 @@
-import customtkinter
-import tkinter as tk
-from tkinter import *
+from impo import * 
+
 
 customtkinter.set_appearance_mode("dark")
 
@@ -24,36 +23,53 @@ class MyTabView(customtkinter.CTkTabview):
         self.label = customtkinter.CTkLabel(master=self.tab("Generer un mot de passe"), textvariable=text_var, width = 900, height = 900)
         self.label.grid(row=0, column=0, padx=20, pady=20)
 
-        text_var = tk.StringVar(value=a)
-        self.label = customtkinter.CTkLabel(master=self.tab("Mes mots de passes"), textvariable=text_var, width = 900, height = 900)
-        self.label.grid(row=0, column=0, padx=20, pady=20)
         self.password_entry = customtkinter.CTkEntry(master=self.tab("Generer un mot de passe"),placeholder_text="Votre mot de passe sécurisé",width=150,height=25)
         #self.password_entry.place(relx=0.6, rely=1.5,)
         self.password_entry.grid(row=0, column = 0 ,  padx = 5,  pady = 10)
-        self.button = customtkinter.CTkButton(master=self.tab("Generer un mot de passe"), text="Generer", command=MyTabView.generate_password)#command=generate_password)
-        self.button.place(relx=0.2, rely=0.5, anchor=tk.CENTER)
+        self.generate_button = customtkinter.CTkButton(master=self.tab("Generer un mot de passe"), text="Generer", command=self.generate_password)
+        self.generate_button.place(relx=0.2, rely=0.5, anchor=tk.CENTER)
 
+        self.save_button = customtkinter.CTkButton(master=self.tab("Generer un mot de passe"), text="Enregistrer", command=self.save_password)
+        self.save_button.place(relx=0.8, rely=0.5, anchor=tk.CENTER)
 
+        self.passwords_listbox = customtkinter.CTkTextbox(master=self.tab("Mes mots de passes"), width=150, height=25)
+        self.passwords_listbox.grid(row=0, column=0, padx=20, pady=20)
 
+        self.refresh_button = customtkinter.CTkButton(master=self.tab("Mes mots de passes"), text="Actualiser", command=self.refresh_passwords_list)
+        self.refresh_button.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+        self.passwords = {}
+
+    def generate_password(self):
+        password = ''.join(random.choices(string.ascii_letters + string.digits + string.punctuation, k=5))#nbr_char))
+        self.password_entry.delete(0, END)
+        self.password_entry.insert(0, password)
+        #nbr_char = int(nbr_char_entry.cget(password))
+
+    def save_password(self):
+        password_name = simpledialog.askstring("Nom du mot de passe", "Entrez le nom du mot de passe à enregistrer", parent=self.master)
+        if password_name:
+            password = self.password_entry.get()
+            self.passwords[password_name] = password
+            messagebox.showinfo("Succès", f"Le mot de passe \"{password_name}\" a été enregistré avec succès.")
+        else:
+            messagebox.showwarning("Attention", "Le nom du mot de passe ne peut pas être vide.")
+    
+    def refresh_passwords_list(self):
+        self.passwords_listbox.delete(0, END)
+        for name, password in self.passwords.items():
+            self.passwords_listbox.insert(END, name)
 
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         self.title("Secured Password ")
-        self.geometry("900x900")
-        # self.minsize(900, 900)
+        # self.geometry("900")
+        self.minsize(900, 900)
         self.tab_view = MyTabView(master=self)
         self.tab_view.grid(row=0, column=0, padx=0, pady=0)
 
 
-    def generate_password():
-        password = ''.join(random.choices(string.ascii_letters + string.digits + string.punctuation, k=5))#nbr_char))
-        password_entry.delete(0, END)
-        password_entry.insert(0, password)
-        nbr_char = int(nbr_char_entry.cget(password))
-
-
-
-
 app = App()
 app.mainloop()
+
