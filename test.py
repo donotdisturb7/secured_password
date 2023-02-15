@@ -28,6 +28,9 @@ class MyTabView(customtkinter.CTkTabview):
         self.password_entry.grid(row=0, column = 0 ,  padx = 5,  pady = 10)
         self.generate_button = customtkinter.CTkButton(master=self.tab("Generer un mot de passe"), text="Generer", command=self.generate_password)
         self.generate_button.place(relx=0.2, rely=0.5, anchor=tk.CENTER)
+        self.password_entry.grid(row=0, column = 0 ,  padx = 5,  pady = 10)
+        self.generate_button = customtkinter.CTkButton(master=self.tab("Generer un mot de passe"), text="retry", command=self.retry)
+        self.generate_button.place(relx=0.1, rely=0.5, anchor=tk.CENTER)
 
         self.save_button = customtkinter.CTkButton(master=self.tab("Generer un mot de passe"), text="Enregistrer", command=self.save_password)
         self.save_button.place(relx=0.8, rely=0.5, anchor=tk.CENTER)
@@ -53,13 +56,27 @@ class MyTabView(customtkinter.CTkTabview):
             self.label.configure(
                 text="Veuillez saisir une longueur de mot de passe valide")
             self.label.grid(row=0, column=0)
-        else:
-            password_length = int(password_length)
-            password = ''.join(random.choices(
+            
+        # else:
+        #     password_length = int(password_length)
+        #     password = ''.join(random.choices(
+        #         string.ascii_letters + string.digits + string.punctuation, k=password_length))
+        #     # self.label.configure(text = "password")
+        #     self.password_entry.delete(0, END)
+        #     self.password_entry.insert(0, password)
+    def retry(self):
+        password_length = self.entry1.get()
+        # ,text="Hello, world!", fg_color="white")
+        self.label = customtkinter.CTkLabel(
+            master=self.tab("Generer un mot de passe"))
+        password_length = int(password_length)
+        password = ''.join(random.choices(
                 string.ascii_letters + string.digits + string.punctuation, k=password_length))
             # self.label.configure(text = "password")
-            self.password_entry.delete(0, END)
-            self.password_entry.insert(0, password)
+        self.password_entry.delete(0, END)
+        self.password_entry.insert(0, password)
+   
+            
     # def generate_password(self):
     #     password = ''.join(random.choices(string.ascii_letters + string.digits + string.punctuation, k=5))#nbr_char))
     #     self.password_entry.delete(0, END)
