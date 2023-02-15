@@ -15,18 +15,16 @@ class MyTabView(customtkinter.CTkTabview):
         self.add("Home")
         self.add("Generer un mot de passe")
         self.add("Mes mots de passes")
-        a = ""
         # ajouter des élements aux tabs
 
-        text_var = tk.StringVar(value=a)
+        text_var = tk.StringVar(value=0)
         self.label1 = customtkinter.CTkLabel(master=self.tab("Home"), textvariable=text_var, width=900, height=900, corner_radius=10)
         self.label1.grid(row=0, column=0, padx=20, pady=20)
 
-        text_var = tk.StringVar(value=a)
+
         self.label2 = customtkinter.CTkLabel(master=self.tab("Generer un mot de passe"), textvariable=text_var, width=900, height=900)
         self.label2.grid(row=0, column=0, padx=20, pady=20)
 
-        #text_var = tk.StringVar(value=a)
         self.label3 = customtkinter.CTkLabel(master=self.tab("Mes mots de passes"), textvariable=text_var, width=900, height=900)
         self.label3.place(x=155,y=155)
         self.password_entry = customtkinter.CTkEntry(master=self.tab("Generer un mot de passe"), placeholder_text="Votre mot de passe sécurisé", width=150, height=25)
@@ -48,11 +46,6 @@ class MyTabView(customtkinter.CTkTabview):
 
 
 
-    # def generate_password(self):
-    #     password_length = int(self.entry1.get())
-    #     password = ''.join(random.choices(string.ascii_letters + string.digits + string.punctuation, k=password_length))
-    #     self.password_entry.delete(0, END)
-    #     self.password_entry.insert(0, password)
     def generate_password(self):
         password_length = self.entry1.get()
         self.label = customtkinter.CTkLabel(master = self.tab("Generer un mot de passe"))#,text="Hello, world!", fg_color="white")
