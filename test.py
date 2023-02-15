@@ -37,6 +37,9 @@ class MyTabView(customtkinter.CTkTabview):
 
         self.refresh_button = customtkinter.CTkButton(master=self.tab("Mes mots de passes"), text="Actualiser", command=self.refresh_passwords_list)
         self.refresh_button.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        self.entry1 = customtkinter.CTkEntry(master=self.tab(
+            "Generer un mot de passe"), textvariable=text_var, width=120, height=25, fg_color=("white", "gray75"), corner_radius=8)
+        self.entry1.place(x=155, y=500)
 
         self.passwords = {}
     def generate_password(self):
