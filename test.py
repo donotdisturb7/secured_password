@@ -8,12 +8,12 @@ class MyTabView(customtkinter.CTkTabview):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
 
-        # create tabs
+        # creation des tabs
         self.add("Home")
         self.add("Generer un mot de passe")
         self.add("Mes mots de passes")
         a = ""
-        # add widgets on tabs
+        # ajoute des widgets
 
         text_var = tk.StringVar(value=a)
         self.label = customtkinter.CTkLabel(master=self.tab("Home"), textvariable=text_var, width = 900, height = 900, corner_radius = 10)
@@ -32,7 +32,7 @@ class MyTabView(customtkinter.CTkTabview):
         self.save_button = customtkinter.CTkButton(master=self.tab("Generer un mot de passe"), text="Enregistrer", command=self.save_password)
         self.save_button.place(relx=0.8, rely=0.5, anchor=tk.CENTER)
 
-        self.passwords_listbox = customtkinter.CTkTextbox(master=self.tab("Mes mots de passes"), width=150, height=25)
+        self.passwords_listbox = customtkinter.CTkTextbox(master=self.tab("Mes mots de passes"), width = 900, height = 900)
         self.passwords_listbox.grid(row=0, column=0, padx=20, pady=20)
 
         self.refresh_button = customtkinter.CTkButton(master=self.tab("Mes mots de passes"), text="Actualiser", command=self.refresh_passwords_list)
