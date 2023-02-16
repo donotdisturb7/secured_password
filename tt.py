@@ -1,10 +1,10 @@
-
 import os
 from PIL import Image
 import random
 import string
 from tkinter import END
 import customtkinter
+
 
 def change_appearance_mode_event(new_appearance_mode):
     customtkinter.set_appearance_mode(new_appearance_mode)
@@ -85,7 +85,7 @@ class App(customtkinter.CTk):
             self.home_frame, text="", image=self.large_test_image)
         self.home_frame_large_image_label.grid(
             row=0, column=0, padx=20, pady=10)
-        
+
         self.home_frame_button_1 = customtkinter.CTkButton(
             self.home_frame, text="", image=self.image_icon_image)
         self.home_frame_button_1.grid(row=1, column=0, padx=20, pady=10)
@@ -115,9 +115,6 @@ class App(customtkinter.CTk):
             self, corner_radius=0, fg_color="transparent")
 
         # frame de depart
-
-
-
 
     def select_frame_by_name(self, name):
         self.home_button.configure(
