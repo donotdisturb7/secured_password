@@ -115,11 +115,11 @@ class App(customtkinter.CTk):
         self.generate_button = customtkinter.CTkButton(master=self.second_frame, text="Generer",
                                                        command=self.generate_password, width=10, height=10,
                                                        hover_color='Black')
-        self.generate_button.place(relx=0.2, rely=0.5, anchor=tk.CENTER)
+        self.generate_button.grid(row=4, column=0, padx=20, pady=10)
         self.password_entry.grid(row=0, column=0, padx=5, pady=10)
         self.entry1 = customtkinter.CTkEntry(master=self.second_frame, width=120, height=25,
                                              fg_color=("white", "gray75"), corner_radius=8)
-        self.entry1.place(relx=0.3, rely=0.6, anchor=tk.CENTER)
+        self.entry1.grid(row=3, column=0, padx=20, pady=10)
 
         # create third frame
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
