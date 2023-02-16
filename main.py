@@ -19,7 +19,7 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("image_example.py")
+        self.title("Secured Password")
         self.geometry("700x550")
 
         self.grid_rowconfigure(0, weight=1)

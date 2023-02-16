@@ -1,4 +1,10 @@
-from requirments import *
+from tkinter import *
+import customtkinter
+import tkinter as tk
+import random
+import string
+from tkinter import simpledialog
+from tkinter import messagebox
 customtkinter.set_appearance_mode("dark")
 
 class MyTabView(customtkinter.CTkTabview):
