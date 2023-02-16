@@ -1,70 +1,82 @@
-import tkinter as tk
-# import tkinter
-from tkinter import END
-import customtkinter
-import random
-import string
-
-
-# Theme disponibles dans la librairie
-# Modes: system (default), light, dark
+from requirments import *
 customtkinter.set_appearance_mode("dark")
-# Themes: blue (default), dark-blue, green
-customtkinter.set_default_color_theme("dark-blue")
 
-# creation de la fenêtre
-app = customtkinter.CTk()  # create CTk window like you do with the Tk window
-app.minsize(400, 300)
-app.title("Générateur de Mot de Passe sécurisé")
+class MyTabView(customtkinter.CTkTabview):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
+
+        # creation des tabs
+        self.add("Home")
+        self.add("Generer un mot de passe")
+        self.add("Mes mots de passes")
+        a = ""
+        # ajoute des widgets
+
+        text_var = tk.StringVar(value=a)
+        self.label = customtkinter.CTkLabel(master=self.tab("Home"), textvariable=text_var, width = 900, height = 900, corner_radius = 10)
+        self.label.grid(row=0, column=0, padx=20, pady=20)
+        
+        text_var = tk.StringVar(value=a)
+        self.label = customtkinter.CTkLabel(master=self.tab("Generer un mot de passe"), textvariable=text_var, width = 900, height = 900)
+        self.label.grid(row=0, column=0, padx=20, pady=20)
+
+        self.password_entry = customtkinter.CTkEntry(master=self.tab("Generer un mot de passe"),placeholder_text="Votre mot de passe sécurisé",width=150,height=25)
+        self.password_entry.grid(row=0, column = 0 ,  padx = 5,  pady = 10)
+        self.generate_button = customtkinter.CTkButton(master=self.tab("Generer un mot de passe"), text="Generer", command=self.generate_password)
+        self.generate_button.place(relx=0.2, rely=0.5, anchor=tk.CENTER)
+        self.password_entry.grid(row=0, column = 0 ,  padx = 5,  pady = 10)
+       
+        self.save_button = customtkinter.CTkButton(master=self.tab("Generer un mot de passe"), text="Enregistrer", command=self.save_password)
+        self.save_button.place(relx=0.8, rely=0.5, anchor=tk.CENTER)
+
+        self.passwords_listbox = customtkinter.CTkTextbox(master=self.tab("Mes mots de passes"), width = 900, height = 900)
+        self.passwords_listbox.grid(row=0, column=0, padx=20, pady=20)
+
+        self.refresh_button = customtkinter.CTkButton(master=self.tab("Mes mots de passes"), text="Actualiser", command=self.refresh_passwords_list)
+        self.refresh_button.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        self.entry1 = customtkinter.CTkEntry(master=self.tab(
+            "Generer un mot de passe"), textvariable=text_var, width=120, height=25, fg_color=("white", "gray75"), corner_radius=8)
+        self.entry1.place(x=155, y=500)
+
+        self.passwords = {}
+
+    def generate_password(self):
+        password_length = self.entry1.get()
+        if not password_length:
+            messagebox.showwarning("Attention", "Veuillez saisir une longueur de mot de passe valide")
+        else:
+            password_length = int(password_length)
+            password = ''.join(random.choices(
+                string.ascii_letters + string.digits + string.punctuation, k=password_length))
+            self.password_entry.delete(0, END)
+            self.password_entry.insert(0, password)
+
+    def save_password(self):
+        password_name = simpledialog.askstring("Nom du mot de passe", "Entrez le nom du mot de passe à enregistrer", parent=self.master)
+        if password_name:
+            password = self.password_entry.get()
+            self.passwords[password_name] = password
+            messagebox.showinfo(
+                "Succès", f"Le mot de passe \"{password_name}\" a été enregistré avec succès.")
+        else:
+            messagebox.showwarning(
+                "Attention", "Le nom du mot de passe ne peut pas être vide.")
+
+    def refresh_passwords_list(self):
+        self.passwords_listbox.delete(0, END)
+        for name, password in self.passwords.items():
+            self.passwords_listbox.insert(END, name)
 
 
-# # function clear
-# def clear():
-#     password_entry.delete(0, END)
+class App(customtkinter.CTk):
+    def __init__(self):
+        super().__init__()
+        self.title("Secured Password ")
+        # self.geometry("900")
+        self.minsize(900, 900)
+        self.tab_view = MyTabView(master=self)
+        self.tab_view.grid(row=0, column=0, padx=0, pady=0)
 
 
-# def clear():
-#     dialog = customtkinter.CTkInputDialog(text="Type in a number:", title="Test")
-#     return dialog.get_input()
-
-
-
-# fontion generation de mot de passe
-def generate_password():
-    
-    password = ''.join(random.choices(string.ascii_letters + string.digits + string.punctuation, k=5))#nbr_char))
-    password_entry.delete(0, END)
-    password_entry.insert(0, password)
-    nbr_char = int(nbr_char_entry.cget(password))
-
-
-
-
-password_entry = customtkinter.CTkEntry(master=app,placeholder_text="Votre mot de passe sécurisé",width=150,height=25,border_width=2,corner_radius=10)
-password_entry.place(relx=0.6, rely=1.5,) #anchor=tkinter.CENTER)
-
-
-#nbr_char_entry = tk.Entry(app)
-
-
-#nbr_char_entry.place(relx=0.20, rely=0.7, anchor=tkinter.CENTER)
-# password_label.place(relx=0.5, rely=0.05, anchor=tkinter.CENTER)
-password_entry.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-# generate_button.grid(row=1, columnspan=2, pady=10)
-
-
-text_var = tk.StringVar(value="CTkLabel")
-
-nbr_char_entry = customtkinter.CTkLabel(master=app,textvariable=text_var,width=120,height=25,fg_color=("white", "gray75"),corner_radius=8)
-nbr_char_entry.place(relx=0.5, rely=0.05, anchor=tk.CENTER)
-# nbr_char_entry.configure(text = password)
-
-
-# CTkButton - Pour creer un le bouton qui lance la fonction generate_password
-button = customtkinter.CTkButton(master=app, text="Generer",command=generate_password)
-button.place(relx=0.2, rely=0.5, anchor=tk.CENTER)
-# buttonclear = customtkinter.CTkButton(master=app, text="clear", command=clear)
-# buttonclear.place(relx=0.5, rely=0.7, anchor=tkinter.CENTER)
-
-# ligne necéssaire pour lancer l'application / la fenetre
+app = App()
 app.mainloop()
