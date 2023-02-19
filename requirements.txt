@@ -1,5 +1,6 @@
 darkdetect
-customtkinter
+customtkinter~=5.1.2
 sqlite3
 string
 random
+Pillow~=9.4.0

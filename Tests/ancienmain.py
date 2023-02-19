@@ -1,4 +1,16 @@
-from requirments import *
+import os
+import random
+from string import ascii_lowercase, ascii_uppercase, digits, punctuation
+import tkinter as tk
+from tkinter import END
+from tkinter import messagebox
+
+
+
+import customtkinter
+from PIL import Image
+
+
 customtkinter.set_appearance_mode("dark")
 
 class MyTabView(customtkinter.CTkTabview):
@@ -37,11 +49,12 @@ class MyTabView(customtkinter.CTkTabview):
         self.entry1 = customtkinter.CTkEntry(master=self.tab(
             "Generer un mot de passe"), textvariable=text_var, width=120, height=25, fg_color=("white", "gray75"), corner_radius=8)
         self.entry1.place(x=155, y=500)
-
+        self.button = customtkinter.CTkButton(self.tab("Mes mots de passes"), text="Open Dialog", command=self.button_click_event)
+        self.button.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
         self.passwords = {}
 
     def generate_password(self):
-        password_length = self.entry1.get()
+        password_length = self.button_click_event()
         if not password_length:
             messagebox.showwarning("Attention", "Veuillez saisir une longueur de mot de passe valide")
         else:
@@ -69,6 +82,15 @@ class MyTabView(customtkinter.CTkTabview):
             self.passwords_listbox.insert(END, name)
 
 
+    def button_click_event(self):
+        a = 0
+        self.dialog = customtkinter.CTkInputDialog(text="Type in a number:", title="Test")
+        return a == "Number:", self.dialog.get_input()
+
+
+    # button = customtkinter.CTkButton(app, text="Open Dialog", command=button_click_event)
+    # button.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
@@ -77,6 +99,7 @@ class App(customtkinter.CTk):
         self.minsize(900, 900)
         self.tab_view = MyTabView(master=self)
         self.tab_view.grid(row=0, column=0, padx=0, pady=0)
+        
 
 
 app = App()

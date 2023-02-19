@@ -20,7 +20,7 @@ class App(customtkinter.CTk):
         super().__init__()
 
         self.title("Secured Password")
-        self.geometry("700x550")
+        self.geometry("800x450")
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
