@@ -1,106 +1,174 @@
 import os
 import random
-from string import ascii_lowercase, ascii_uppercase, digits, punctuation
+import string
 import tkinter as tk
 from tkinter import END
 from tkinter import messagebox
 
-
-
 import customtkinter
 from PIL import Image
 
-
-customtkinter.set_appearance_mode("dark")
-
-class MyTabView(customtkinter.CTkTabview):
-    def __init__(self, master, **kwargs):
-        super().__init__(master, **kwargs)
-        
-        # creation des tabs
-        self.add("Home")
-        self.add("Generer un mot de passe")
-        self.add("Mes mots de passes")
-        a = ""
-        # ajoute des widgets
-
-        text_var = tk.StringVar(value=a)
-        self.label = customtkinter.CTkLabel(master=self.tab("Home"), textvariable=text_var, width = 900, height = 900, corner_radius = 10)
-        self.label.grid(row=0, column=0, padx=20, pady=20)
-        
-        text_var = tk.StringVar(value=a)
-        self.label = customtkinter.CTkLabel(master=self.tab("Generer un mot de passe"), textvariable=text_var, width = 900, height = 900)
-        self.label.grid(row=0, column=0, padx=20, pady=20)
-
-        self.password_entry = customtkinter.CTkEntry(master=self.tab("Generer un mot de passe"),placeholder_text="Votre mot de passe sécurisé",width=150,height=25)
-        self.password_entry.grid(row=0, column = 0 ,  padx = 5,  pady = 10)
-        self.generate_button = customtkinter.CTkButton(master=self.tab("Generer un mot de passe"), text="Generer", command=self.generate_password)
-        self.generate_button.place(relx=0.2, rely=0.5, anchor=tk.CENTER)
-        self.password_entry.grid(row=0, column = 0 ,  padx = 5,  pady = 10)
-       
-        self.save_button = customtkinter.CTkButton(master=self.tab("Generer un mot de passe"), text="Enregistrer", command=self.save_password)
-        self.save_button.place(relx=0.8, rely=0.5, anchor=tk.CENTER)
-
-        self.passwords_listbox = customtkinter.CTkTextbox(master=self.tab("Mes mots de passes"), width = 900, height = 900)
-        self.passwords_listbox.grid(row=0, column=0, padx=20, pady=20)
-
-        self.refresh_button = customtkinter.CTkButton(master=self.tab("Mes mots de passes"), text="Actualiser", command=self.refresh_passwords_list)
-        self.refresh_button.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-        self.entry1 = customtkinter.CTkEntry(master=self.tab(
-            "Generer un mot de passe"), textvariable=text_var, width=120, height=25, fg_color=("white", "gray75"), corner_radius=8)
-        self.entry1.place(x=155, y=500)
-        self.button = customtkinter.CTkButton(self.tab("Mes mots de passes"), text="Open Dialog", command=self.button_click_event)
-        self.button.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-        self.passwords = {}
-
-    def generate_password(self):
-        password_length = self.button_click_event()
-        if not password_length:
-            messagebox.showwarning("Attention", "Veuillez saisir une longueur de mot de passe valide")
-        else:
-            password_length = int(password_length)
-            password = ''.join(random.choices(
-                string.ascii_letters + string.digits + string.punctuation, k=password_length))
-            self.password_entry.delete(0, END)
-            self.password_entry.insert(0, password)
-
-    def save_password(self):
-        password_name = simpledialog.askstring("Nom du mot de passe", "Entrez le nom du mot de passe à enregistrer", parent=self.master)
-        if password_name:
-            password = self.password_entry.get()
-            self.passwords[password_name] = password
-            self.textbox.insert(password)
-            messagebox.showinfo(
-                "Succès", f"Le mot de passe \"{password_name}\" a été enregistré avec succès.")
-        else:
-            messagebox.showwarning(
-                "Attention", "Le nom du mot de passe ne peut pas être vide.")
-
-    def refresh_passwords_list(self):
-        self.passwords_listbox.delete(0, END)
-        for name, password in self.passwords.items():
-            self.passwords_listbox.insert(END, name)
+customtkinter.set_appearance_mode("Dark")
 
 
-    def button_click_event(self):
-        a = 0
-        self.dialog = customtkinter.CTkInputDialog(text="Type in a number:", title="Test")
-        return a == "Number:", self.dialog.get_input()
+def change_theme(new_appearance_mode):
+    customtkinter.set_appearance_mode(new_appearance_mode)
 
-
-    # button = customtkinter.CTkButton(app, text="Open Dialog", command=button_click_event)
-    # button.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
-        self.title("Secured Password ")
-        # self.geometry("900")
-        self.minsize(900, 900)
-        self.tab_view = MyTabView(master=self)
-        self.tab_view.grid(row=0, column=0, padx=0, pady=0)
-        
+
+        self.title("Secured Password")
+        self.geometry("800x450")
+
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+
+       # load images with light and dark mode image
+        image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets")
+        self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "secure.png")), size=(26, 26))
+        self.large_test_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "large_test_image.png")),
+                                                       size=(500, 150))
+        self.image_icon_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "image_icon_light.png")),
+                                                       size=(20, 20))
+        self.home_image = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "home_dark.png")),
+                                                 dark_image=Image.open(os.path.join(image_path, "home_light.png")),
+                                                 size=(20, 20))
+        self.chat_image = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "gen.png")),
+                                                 dark_image=Image.open(os.path.join(image_path, "gen2.png")),
+                                                 size=(20, 20))
+        self.add_user_image = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "mdp.png")),
+                                                     dark_image=Image.open(os.path.join(image_path, "mdp.png")),
+                                                     size=(20, 20))
+
+        # create navigation frame
+        self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
+        self.navigation_frame.grid(row=0, column=0, sticky="nsew")
+        self.navigation_frame.grid_rowconfigure(4, weight=1)
+
+        self.navigation_frame_label = customtkinter.CTkLabel(self.navigation_frame, text="  Secured password",
+                                                             image=self.logo_image,
+                                                             compound="left",
+                                                             font=customtkinter.CTkFont(size=15, weight="bold"))
+        self.navigation_frame_label.grid(row=0, column=0, padx=20, pady=20)
+
+        self.home_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40, border_spacing=10,
+                                                   text="Home",
+                                                   fg_color="transparent", text_color=("gray10", "gray90"),
+                                                   hover_color=("gray70", "gray30"),
+                                                   image=self.home_image, anchor="w", command=self.home_button_event)
+        self.home_button.grid(row=1, column=0, sticky="ew")
+
+        self.frame_2_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
+                                                      border_spacing=10, text="Générer un Mot de passe",
+                                                      fg_color="transparent", text_color=("gray10", "gray90"),
+                                                      hover_color=("gray70", "gray30"),
+                                                      image=self.chat_image, anchor="w",
+                                                      command=self.frame_2_button_event)
+        self.frame_2_button.grid(row=2, column=0, sticky="ew")
+
+        self.frame_3_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
+                                                      border_spacing=10, text="Mes mots de passes",
+                                                      fg_color="transparent", text_color=("gray10", "gray90"),
+                                                      hover_color=("gray70", "gray30"),
+                                                      image=self.add_user_image, anchor="w",
+                                                      command=self.frame_3_button_event)
+        self.frame_3_button.grid(row=3, column=0, sticky="ew")
+
+        # menu pour changer de thème
+        self.appearance_mode_menu = customtkinter.CTkOptionMenu(self.navigation_frame,
+                                                                values=["Dark", "Light", "System"],
+                                                                command=change_theme)
+        self.appearance_mode_menu.grid(row=6, column=0, padx=20, pady=20, sticky="s")
+
+        # creation de la frame home
+        self.home_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.home_frame.grid_columnconfigure(0, weight=1)
+
+        self.home_frame_large_image_label = customtkinter.CTkLabel(self.home_frame, text="",
+                                                                   image=self.large_test_image)
+        self.home_frame_large_image_label.grid(row=0, column=0, padx=20, pady=10)
+
+        self.home_frame_button_1 = customtkinter.CTkButton(self.home_frame, text="", image=self.image_icon_image)
+        self.home_frame_button_1.grid(row=1, column=0, padx=20, pady=10)
+        self.home_frame_button_2 = customtkinter.CTkButton(self.home_frame, text="CTkButton",
+                                                           image=self.image_icon_image, compound="right")
+        self.home_frame_button_2.grid(row=2, column=0, padx=20, pady=10)
+        self.home_frame_button_3 = customtkinter.CTkButton(self.home_frame, text="CTkButton",
+                                                           image=self.image_icon_image, compound="top")
+        self.home_frame_button_3.grid(row=3, column=0, padx=20, pady=10)
+        self.home_frame_button_4 = customtkinter.CTkButton(self.home_frame, text="CTkButton",
+                                                           image=self.image_icon_image, compound="bottom", anchor="w")
+        self.home_frame_button_4.grid(row=4, column=0, padx=20, pady=10)
+
+        # creation de la frame2
+        self.second_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.second_frame.grid_columnconfigure(0, weight=1)
+        self.password_entry = customtkinter.CTkEntry(master=self.second_frame,
+                                                     placeholder_text="Votre mot de passe sécurisé", width=150,
+                                                     height=25)
+
+        # button et entry password // le bouton pour generer est ici + entry pour donner le nombre de character d'un
+        # mdp
+        self.password_entry.grid(row=0, column=0, padx=5, pady=10)
+        self.generate_button = customtkinter.CTkButton(master=self.second_frame, text="Generer",
+                                                       command=self.generate_password, width=10, height=10,
+                                                       hover_color='Black')
+        self.generate_button.grid(row=4, column=0, padx=20, pady=10)
+        self.password_entry.grid(row=0, column=0, padx=5, pady=10)
+        self.entry1 = customtkinter.CTkEntry(master=self.second_frame, width=120, height=25,
+                                             fg_color=("white", "gray75"), corner_radius=8)
+        self.entry1.grid(row=3, column=0, padx=20, pady=10)
+
+        # create third frame
+        self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+
+        # frame par défaut
+        self.select_frame_by_name("home")
+
+    def generate_password(self):
+        password_length = self.entry1.get()
+        if not password_length:
+            messagebox.showwarning("Attention", "Veuillez saisir une longueur de mot de passe valide")
+        else:
+            password_length = int(password_length)
+            password = ''.join(
+                random.choices(string.ascii_letters + string.digits + string.punctuation, k=password_length))
+            self.password_entry.delete(0, END)
+            self.password_entry.insert(0, password)
+
+    def select_frame_by_name(self, name):
+        # set button color for selected button
+        self.home_button.configure(fg_color=("gray75", "gray25") if name == "home" else "transparent")
+        self.frame_2_button.configure(fg_color=("gray75", "gray25") if name == "frame_2" else "transparent")
+        self.frame_3_button.configure(fg_color=("gray75", "gray25") if name == "frame_3" else "transparent")
+
+        # selection des frames
+        if name == "home":
+            self.home_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.home_frame.grid_forget()
+        if name == "frame_2":
+            self.second_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.second_frame.grid_forget()
+        if name == "frame_3":
+            self.third_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.third_frame.grid_forget()
+
+    def home_button_event(self):
+        self.select_frame_by_name("home")
+
+    def frame_2_button_event(self):
+        self.select_frame_by_name("frame_2")
+
+    def frame_3_button_event(self):
+        self.select_frame_by_name("frame_3")
 
 
-app = App()
-app.mainloop()
+# lancement
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()

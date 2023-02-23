@@ -1,12 +1,11 @@
 import os
-import random
-import string
 import tkinter as tk
-from tkinter import END
-from tkinter import messagebox
+from string import ascii_lowercase, ascii_uppercase, digits, punctuation
 
 import customtkinter
 from PIL import Image
+
+import password
 
 customtkinter.set_appearance_mode("Dark")
 
@@ -19,13 +18,13 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("Secured Password")
-        self.geometry("800x450")
+        self.title("secured password")
+        self.geometry("700x550")
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
 
-       # load images with light and dark mode image
+        # load images with light and dark mode image
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets")
         self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "secure.png")), size=(26, 26))
         self.large_test_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "large_test_image.png")),
@@ -105,21 +104,45 @@ class App(customtkinter.CTk):
         # creation de la frame2
         self.second_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.second_frame.grid_columnconfigure(0, weight=1)
-        self.password_entry = customtkinter.CTkEntry(master=self.second_frame,
-                                                     placeholder_text="Votre mot de passe sécurisé", width=150,
-                                                     height=25)
 
-        # button et entry password // le bouton pour generer est ici + entry pour donner le nombre de character d'un
-        # mdp
-        self.password_entry.grid(row=0, column=0, padx=5, pady=10)
-        self.generate_button = customtkinter.CTkButton(master=self.second_frame, text="Generer",
-                                                       command=self.generate_password, width=10, height=10,
-                                                       hover_color='Black')
-        self.generate_button.grid(row=4, column=0, padx=20, pady=10)
-        self.password_entry.grid(row=0, column=0, padx=5, pady=10)
-        self.entry1 = customtkinter.CTkEntry(master=self.second_frame, width=120, height=25,
-                                             fg_color=("white", "gray75"), corner_radius=8)
-        self.entry1.grid(row=3, column=0, padx=20, pady=10)
+        self.entry_password = customtkinter.CTkEntry(master=self.second_frame, width=300)
+
+        self.entry_password.place(relx=0.5, rely=0.1, anchor=tk.CENTER)
+
+        self.btn_generate = customtkinter.CTkButton(master=self.second_frame, text="Generer", width=100,
+                                                    command=self.set_password)
+        self.btn_generate.place(relx=0.2, rely=0.5, anchor=tk.CENTER)
+
+        self.password_length_slider = customtkinter.CTkSlider(master=self.second_frame, from_=4, to=30,
+                                                              number_of_steps=30,
+                                                              command=self.slider_event)
+
+        self.password_length_slider.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+        self.password_length_entry = customtkinter.CTkEntry(master=self.second_frame, width=50)
+
+        self.password_length_entry.place(relx=0.1, rely=0.1, anchor=tk.CENTER)
+
+        self.cb_digits_var = tk.StringVar()
+
+        self.cb_digits = customtkinter.CTkCheckBox(master=self.second_frame, text="0-9",
+                                                   variable=self.cb_digits_var, onvalue=digits, offvalue="")
+        self.cb_digits.grid(row=2, column=0, padx=10)
+
+        self.cb_lower_var = tk.StringVar()
+        self.cb_lower = customtkinter.CTkCheckBox(master=self.second_frame, text="a-z", variable=self.cb_lower_var,
+                                                  onvalue=ascii_lowercase, offvalue="")
+        self.cb_lower.grid(row=2, column=1)
+
+        self.cb_upper_var = tk.StringVar()
+        self.cb_upper = customtkinter.CTkCheckBox(master=self.second_frame, text="A-Z", variable=self.cb_upper_var,
+                                                  onvalue=ascii_uppercase, offvalue="")
+        self.cb_upper.grid(row=2, column=2)
+
+        self.cb_symbols_var = tk.StringVar()
+        self.cb_symbols = customtkinter.CTkCheckBox(master=self.second_frame, text="@#$%", variable=self.cb_symbols_var,
+                                                    onvalue=punctuation, offvalue="")
+        self.cb_symbols.grid(row=2, column=3)
 
         # create third frame
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
@@ -127,16 +150,19 @@ class App(customtkinter.CTk):
         # frame par défaut
         self.select_frame_by_name("home")
 
-    def generate_password(self):
-        password_length = self.entry1.get()
-        if not password_length:
-            messagebox.showwarning("Attention", "Veuillez saisir une longueur de mot de passe valide")
-        else:
-            password_length = int(password_length)
-            password = ''.join(
-                random.choices(string.ascii_letters + string.digits + string.punctuation, k=password_length))
-            self.password_entry.delete(0, END)
-            self.password_entry.insert(0, password)
+    def slider_event(self, value):
+        self.password_length_entry.delete(0, 'end')
+        self.password_length_entry.insert(0, int(value))
+
+    def get_characters(self):
+        chars = "".join(self.cb_digits_var.get() + self.cb_lower_var.get()
+                        + self.cb_upper_var.get() + self.cb_symbols_var.get())
+        return chars
+
+    def set_password(self):
+        self.entry_password.delete(0, 'end')
+        self.entry_password.insert(0, password.create_new(length=int(self.password_length_slider.get()),
+                                                          characters=self.get_characters()))
 
     def select_frame_by_name(self, name):
         # set button color for selected button
