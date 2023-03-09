@@ -25,7 +25,7 @@ class App(customtkinter.CTk):
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
 
-       # load images with light and dark mode image
+       # images
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets")
         self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "secure.png")), size=(26, 26))
         self.large_test_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "large_test_image.png")),
@@ -42,7 +42,7 @@ class App(customtkinter.CTk):
                                                      dark_image=Image.open(os.path.join(image_path, "mdp.png")),
                                                      size=(20, 20))
 
-        # create navigation frame
+        # menu navigation
         self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
         self.navigation_frame.grid(row=0, column=0, sticky="nsew")
         self.navigation_frame.grid_rowconfigure(4, weight=1)
@@ -121,7 +121,7 @@ class App(customtkinter.CTk):
                                              fg_color=("white", "gray75"), corner_radius=8)
         self.entry1.grid(row=3, column=0, padx=20, pady=10)
 
-        # create third frame
+        # creation frame3
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
         # frame par défaut
@@ -139,7 +139,6 @@ class App(customtkinter.CTk):
             self.password_entry.insert(0, password)
 
     def change_frame(self, name):
-        # set button color for selected button
         self.home_button.configure(fg_color=("gray75", "gray25") if name == "home" else "transparent")
         self.frame_2_button.configure(fg_color=("gray75", "gray25") if name == "frame_2" else "transparent")
         self.frame_3_button.configure(fg_color=("gray75", "gray25") if name == "frame_3" else "transparent")

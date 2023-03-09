@@ -160,6 +160,7 @@ class App(customtkinter.CTk):
         return chars
 
     def set_password(self):
+        "fonction qui va afficher le mot de passe cree avec 'password.py' en prenant la valeur du slider comme length"
         self.entry_password.delete(0, 'end')
         self.entry_password.insert(0, password.create_new(length=int(self.password_length_slider.get()),
                                                           characters=self.get_characters()))
