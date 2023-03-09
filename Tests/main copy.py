@@ -1,6 +1,7 @@
 import os
 import tkinter as tk
 from string import ascii_lowercase, ascii_uppercase, digits, punctuation
+from tkinter import messagebox
 
 import customtkinter
 from PIL import Image
@@ -160,10 +161,14 @@ class App(customtkinter.CTk):
         return chars
 
     def set_password(self):
-        self.entry_password.delete(0, 'end')
-        self.entry_password.insert(0, password.create_new(length=int(self.password_length_slider.get()),
+        try :
+            self.entry_password.delete(0, 'end')
+            self.entry_password.insert(0, password.create_new(length=int(self.password_length_slider.get()),
                                                           characters=self.get_characters()))
+        except IndexError:
+                        messagebox.showwarning("Attention", "Veuillez saisir une longueur de mot de passe valide ET les characteres que vous voulez dans votre mot de passe")
 
+        
     def change_frame(self, name):
         self.home_button.configure(fg_color=("gray75", "gray25") if name == "home" else "transparent")
         self.frame_2_button.configure(fg_color=("gray75", "gray25") if name == "frame_2" else "transparent")
