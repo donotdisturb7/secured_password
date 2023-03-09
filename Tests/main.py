@@ -24,7 +24,7 @@ class App(customtkinter.CTk):
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
 
-        # load images with light and dark mode image
+        # images
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets")
         self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "secure.png")), size=(26, 26))
         self.large_test_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "large_test_image.png")),
@@ -41,7 +41,7 @@ class App(customtkinter.CTk):
                                                      dark_image=Image.open(os.path.join(image_path, "mdp.png")),
                                                      size=(20, 20))
 
-        # create navigation frame
+        # menu navigation 
         self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
         self.navigation_frame.grid(row=0, column=0, sticky="nsew")
         self.navigation_frame.grid_rowconfigure(4, weight=1)
@@ -144,11 +144,11 @@ class App(customtkinter.CTk):
                                                     onvalue=punctuation, offvalue="")
         self.cb_symbols.grid(row=2, column=3)
 
-        # create third frame
+        # creation de la frame3
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
         # frame par défaut
-        self.select_frame_by_name("home")
+        self.change_frame("home")
 
     def slider_event(self, value):
         self.password_length_entry.delete(0, 'end')
@@ -164,8 +164,7 @@ class App(customtkinter.CTk):
         self.entry_password.insert(0, password.create_new(length=int(self.password_length_slider.get()),
                                                           characters=self.get_characters()))
 
-    def select_frame_by_name(self, name):
-        # set button color for selected button
+    def change_frame(self, name):
         self.home_button.configure(fg_color=("gray75", "gray25") if name == "home" else "transparent")
         self.frame_2_button.configure(fg_color=("gray75", "gray25") if name == "frame_2" else "transparent")
         self.frame_3_button.configure(fg_color=("gray75", "gray25") if name == "frame_3" else "transparent")
@@ -185,13 +184,13 @@ class App(customtkinter.CTk):
             self.third_frame.grid_forget()
 
     def home_button_event(self):
-        self.select_frame_by_name("home")
+        self.change_frame("home")
 
     def frame_2_button_event(self):
-        self.select_frame_by_name("frame_2")
+        self.change_frame("frame_2")
 
     def frame_3_button_event(self):
-        self.select_frame_by_name("frame_3")
+        self.change_frame("frame_3")
 
 
 # lancement

@@ -125,7 +125,7 @@ class App(customtkinter.CTk):
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
         # frame par défaut
-        self.select_frame_by_name("home")
+        self.change_frame("home")
 
     def generate_password(self):
         password_length = self.entry1.get()
@@ -138,7 +138,7 @@ class App(customtkinter.CTk):
             self.password_entry.delete(0, END)
             self.password_entry.insert(0, password)
 
-    def select_frame_by_name(self, name):
+    def change_frame(self, name):
         # set button color for selected button
         self.home_button.configure(fg_color=("gray75", "gray25") if name == "home" else "transparent")
         self.frame_2_button.configure(fg_color=("gray75", "gray25") if name == "frame_2" else "transparent")
@@ -159,13 +159,13 @@ class App(customtkinter.CTk):
             self.third_frame.grid_forget()
 
     def home_button_event(self):
-        self.select_frame_by_name("home")
+        self.change_frame("home")
 
     def frame_2_button_event(self):
-        self.select_frame_by_name("frame_2")
+        self.change_frame("frame_2")
 
     def frame_3_button_event(self):
-        self.select_frame_by_name("frame_3")
+        self.change_frame("frame_3")
 
 
 # lancement
