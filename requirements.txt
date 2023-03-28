@@ -1,2 +1,2 @@
-customtkinter~=5.1.2
-Pillow~=9.4.0
+customtkinter
+Pillow
