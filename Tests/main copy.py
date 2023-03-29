@@ -163,10 +163,20 @@ class App(customtkinter.CTk):
                                                     command=self.bd)
         self.btn_geenerate.place(relx=0.2, rely=0.5, anchor=tk.CENTER)
 
+        self.bt_geenerate = customtkinter.CTkButton(master=self.third_frame, text="bdd", width=100,
+                                                    command=self.reload_text)
+        self.bt_geenerate.place(relx=0.3, rely=0.7, anchor=tk.CENTER)
+        
         
         self.textbox = customtkinter.CTkTextbox(master=self.third_frame, width=800, corner_radius=0)
         self.textbox.grid(row=1, column=1, sticky="nsew")
 
+        self.username_db = customtkinter.CTkEntry(master=self.second_frame, width=100)
+        self.username_db.place(relx=0.5, rely=0.20)
+        self.website_db = customtkinter.CTkEntry(master=self.second_frame, width=100)
+        self.website_db.place(relx=0.5, rely=0.40)
+        self.password_db = customtkinter.CTkEntry(master=self.second_frame, width=100)
+        self.password_db.place(relx=0.5, rely=0.60)
 
 
         #self.textbox.insert(0, "new text to insert")  # insert at line 0 character 0
@@ -176,7 +186,7 @@ class App(customtkinter.CTk):
         for result in results:
             self.textbox.insert(tk.END, f"{result[0]}: {result[1]}: ,{result[2]} \n")
 
-        self.textbox.configure(state="disabled")
+        # self.textbox.configure(state="disabled")
 
 
 
@@ -214,9 +224,9 @@ class App(customtkinter.CTk):
         else:
             self.third_frame.grid_forget()
     def bd(self):
-        self.username = "caca"
-        self.password = "pipi"
-        self.website = "caca"
+        self.username = str(self.username_db.get())
+        self.password = str(self.password_db.get())
+        self.website = str(self.website_db.get())
         c.execute("INSERT INTO passwords (username, website, password) VALUES (?, ?, ?)", (self.username, self.website, self.password))
         conn.commit()
         
@@ -228,7 +238,16 @@ class App(customtkinter.CTk):
 
     def frame_3_button_event(self):
         self.change_frame("frame_3")
-
+    
+    def reload_text(self):
+        self.username = str(self.username_db.get())
+        self.password = str(self.password_db.get())
+        self.website = str(self.website_db.get())
+        # text_var.set()
+        self.textbox.delete(0, tk.END)
+        conn.commit()
+        self.textbox.insert(tk.END, c.execute("INSERT INTO passwords (username, website, password) VALUES (?, ?, ?)", (self.username, self.website, self.password)))
+       
 
 
 # lancement
