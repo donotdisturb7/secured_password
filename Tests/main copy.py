@@ -1,12 +1,20 @@
 import os
 import tkinter as tk
 from string import ascii_lowercase, ascii_uppercase, digits, punctuation
-from tkinter import messagebox
+import sqlite3
 
 import customtkinter
 from PIL import Image
 
 import password
+
+
+#base de donnée
+conn = sqlite3.connect('passwords.db')
+c = conn.cursor()
+c.execute("SELECT username, password, website FROM passwords")
+results = c.fetchall()
+
 
 customtkinter.set_appearance_mode("Dark")
 
@@ -151,6 +159,27 @@ class App(customtkinter.CTk):
         # frame par défaut
         self.change_frame("home")
 
+        self.btn_geenerate = customtkinter.CTkButton(master=self.third_frame, text="bdd", width=100,
+                                                    command=self.bd)
+        self.btn_geenerate.place(relx=0.2, rely=0.5, anchor=tk.CENTER)
+
+        
+        self.textbox = customtkinter.CTkTextbox(master=self.third_frame, width=800, corner_radius=0)
+        self.textbox.grid(row=1, column=1, sticky="nsew")
+
+
+
+        #self.textbox.insert(0, "new text to insert")  # insert at line 0 character 0
+        #self.text = self.textbox.get(0, "end")  # get text from line 0 character 0 till the end
+        #self.textbox.delete(0, "end")  # delete all text
+
+        for result in results:
+            self.textbox.insert(tk.END, f"{result[0]}: {result[1]}: ,{result[2]} \n")
+
+        self.textbox.configure(state="disabled")
+
+
+
     def slider_event(self, value):
         self.password_length_entry.delete(0, 'end')
         self.password_length_entry.insert(0, int(value))
@@ -161,14 +190,11 @@ class App(customtkinter.CTk):
         return chars
 
     def set_password(self):
-        try :
-            self.entry_password.delete(0, 'end')
-            self.entry_password.insert(0, password.create_new(length=int(self.password_length_slider.get()),
+        "fonction qui va afficher le mot de passe cree avec 'password.py' en prenant la valeur du slider comme length"
+        self.entry_password.delete(0, 'end')
+        self.entry_password.insert(0, password.create_new(length=int(self.password_length_slider.get()),
                                                           characters=self.get_characters()))
-        except IndexError:
-                        messagebox.showwarning("Attention", "Veuillez saisir une longueur de mot de passe valide ET les characteres que vous voulez dans votre mot de passe")
 
-        
     def change_frame(self, name):
         self.home_button.configure(fg_color=("gray75", "gray25") if name == "home" else "transparent")
         self.frame_2_button.configure(fg_color=("gray75", "gray25") if name == "frame_2" else "transparent")
@@ -187,7 +213,13 @@ class App(customtkinter.CTk):
             self.third_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.third_frame.grid_forget()
-
+    def bd(self):
+        self.username = "caca"
+        self.password = "pipi"
+        self.website = "caca"
+        c.execute("INSERT INTO passwords (username, website, password) VALUES (?, ?, ?)", (self.username, self.website, self.password))
+        conn.commit()
+        
     def home_button_event(self):
         self.change_frame("home")
 
@@ -196,6 +228,7 @@ class App(customtkinter.CTk):
 
     def frame_3_button_event(self):
         self.change_frame("frame_3")
+
 
 
 # lancement

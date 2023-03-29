@@ -1,22 +1,32 @@
 import sqlite3
-import os
 
-def create_dbtable():
-    conn = sqlite3.connect(r"Password_Manger/User/leveldb/user.db")
-    cur = conn.cursor()
-    cur.execute('''CREATE TABLE IF NOT EXISTS UserDateBAse
-                     (ID    INT     Primary     Key,
-                    Username    CHAR(50),
-                     Password    TEXT(100));''')
-    conn.commit()
-    conn.close()
+# Connect to the database
+conn = sqlite3.connect('passwords.db')
+c = conn.cursor()
 
-def create_database():
-    if os.path.exists("Password_Manger/User/leveldb/user.db"):
-        create_dbtable()
-        pass
+# Create the table if it doesn't already exist
+c.execute('''CREATE TABLE IF NOT EXISTS passwords
+             (id INTEGER PRIMARY KEY AUTOINCREMENT,
+              username TEXT,
+              website TEXT,
+              password TEXT,
+              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
+
+# Insert a new password into the database
+username = "john"
+website = "example.com"
+password = "pa$$w0rd"
+c.execute("INSERT INTO passwords (username, website, password) VALUES (?, ?, ?)", (username, website, password))
+conn.commit()
+
+# Retrieve a password from the database
+c.execute("SELECT password FROM passwords WHERE username=? AND website=?", (username, website))
+result = c.fetchone()
+if result:
+    stored_password = result[0]
+    if stored_password == password:
+        print("Password is correct!")
     else:
-        os.mkdir(r"Password_Manger/Users/leveldb")
-        create_dbtable()
-
-create_database()
+        print("Password is incorrect.")
+else:
+    print("No matching password found.")
