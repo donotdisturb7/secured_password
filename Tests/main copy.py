@@ -159,11 +159,13 @@ class App(customtkinter.CTk):
         # frame par défaut
         self.change_frame("home")
 
+        #bouton ajouter la bd dans la textbox
         self.btn_geenerate = customtkinter.CTkButton(master=self.third_frame, text="bdd", width=100,
                                                     command=self.bd)
         self.btn_geenerate.place(relx=0.2, rely=0.5, anchor=tk.CENTER)
 
-        self.bt_geenerate = customtkinter.CTkButton(master=self.third_frame, text="bdd", width=100,
+        #bouton actualiser 
+        self.bt_geenerate = customtkinter.CTkButton(master=self.third_frame, text="b2d", width=100,
                                                     command=self.reload_text)
         self.bt_geenerate.place(relx=0.3, rely=0.7, anchor=tk.CENTER)
         
@@ -183,13 +185,15 @@ class App(customtkinter.CTk):
         #self.text = self.textbox.get(0, "end")  # get text from line 0 character 0 till the end
         #self.textbox.delete(0, "end")  # delete all text
 
+
+        #ce code va inserer dans la textbox les element de la bd result [0] pour username ainsi de suite
         for result in results:
             self.textbox.insert(tk.END, f"{result[0]}: {result[1]}: ,{result[2]} \n")
 
         # self.textbox.configure(state="disabled")
 
 
-
+    #le slide pour choisir le nombre de charactere du mdp
     def slider_event(self, value):
         self.password_length_entry.delete(0, 'end')
         self.password_length_entry.insert(0, int(value))
@@ -223,6 +227,7 @@ class App(customtkinter.CTk):
             self.third_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.third_frame.grid_forget()
+    #fonction de qui permet d'ajouter les entry username_db password_db et website_db a la basse de donne passwords.db       
     def bd(self):
         self.username = str(self.username_db.get())
         self.password = str(self.password_db.get())
@@ -238,13 +243,14 @@ class App(customtkinter.CTk):
 
     def frame_3_button_event(self):
         self.change_frame("frame_3")
-    
+#
+# la j'essaie de faire la fonction pour actualiser le textbox des mots de passe / elle fonctionne a moitier 
     def reload_text(self):
         self.username = str(self.username_db.get())
         self.password = str(self.password_db.get())
         self.website = str(self.website_db.get())
         # text_var.set()
-        self.textbox.delete(0, tk.END)
+        self.textbox.delete("1.0", tk.END)
         conn.commit()
         self.textbox.insert(tk.END, c.execute("INSERT INTO passwords (username, website, password) VALUES (?, ?, ?)", (self.username, self.website, self.password)))
        
