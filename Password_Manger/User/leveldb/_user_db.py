@@ -13,7 +13,7 @@ c.execute('''CREATE TABLE IF NOT EXISTS passwords
               created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
 
 # Insert a new password into the database
-username = "john"
+username = "j"
 website = "example.com"
 password = "pa$$w0rd"
 c.execute("INSERT INTO passwords (username, website, password) VALUES (?, ?, ?)", (username, website, password))
