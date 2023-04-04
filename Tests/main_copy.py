@@ -178,18 +178,21 @@ class App(customtkinter.CTk):
         self.change_frame("home")
 
         # bouton ajouter la bd dans la textbox
-        self.btn_geenerate = customtkinter.CTkButton(master=self.third_frame, text="Put", width=100,
+        self.btn_geenerate = customtkinter.CTkButton(master=self.second_frame, text="Enregistrer", width=100,
                                                      command=self.put)
-        self.btn_geenerate.place(relx=0.2, rely=0.5, anchor=tk.CENTER)
+        self.btn_geenerate.place(relx=0.2, rely=0.7, anchor=tk.CENTER)
 
         # bouton actualiser
-        self.bt_geenerate = customtkinter.CTkButton(master=self.third_frame, text="reload", width=100,
+        self.bt_geenerate = customtkinter.CTkButton(master=self.third_frame, text="Recharger", width=100,
                                                     command=self.reload_text)
         self.bt_geenerate.place(relx=0.3, rely=0.7, anchor=tk.CENTER)
+        self.bet_geenerate = customtkinter.CTkButton(master=self.third_frame, text="remove", width=100,
+                                                    command=self.remove_item)
+        self.bet_geenerate.place(relx=0.4, rely=0.8, anchor=tk.CENTER)
 
         self.textbox = customtkinter.CTkTextbox(
-            master=self.third_frame, width=800, corner_radius=0,scrollbar_button_color='red')
-        self.textbox.grid(row=1, column=1, sticky="nsew")
+            master=self.third_frame, width=1200,corner_radius=0,scrollbar_button_color='red')
+        self.textbox.grid(row=1, column=2, sticky="nsew")
 
         self.username_db = customtkinter.CTkEntry(
             master=self.second_frame, width=100)
@@ -197,20 +200,14 @@ class App(customtkinter.CTk):
         self.website_db = customtkinter.CTkEntry(
             master=self.second_frame, width=100)
         self.website_db.place(relx=0.5, rely=0.40)
-        self.password_db = customtkinter.CTkEntry(
-            master=self.second_frame, width=100)
-        self.password_db.place(relx=0.5, rely=0.60)
 
-        # self.textbox.insert(0, "new text to insert")  # insert at line 0 character 0
-        # self.text = self.textbox.get(0, "end")  # get text from line 0 character 0 till the end
-        # self.textbox.delete(0, "end")  # delete all text
 
         # ce code va inserer dans la textbox les element de la bd result [0] pour username ainsi de suite
         for result in results:
             self.textbox.insert(
                 tk.END, f"{result[0]}: {result[1]}: ,{result[2]} \n")
 
-        # self.textbox.configure(state="disabled")
+        self.textbox.configure(state="normal")
 
     # le slide pour choisir le nombre de charactere du mdp
 
@@ -226,8 +223,9 @@ class App(customtkinter.CTk):
     def set_password(self):
         "fonction qui va afficher le mot de passe cree avec 'password.py' en prenant la valeur du slider comme length"
         self.entry_password.delete(0, 'end')
-        self.entry_password.insert(0, password.create_new(length=int(self.password_length_slider.get()),
+        self.a = self.entry_password.insert(0, password.create_new(length=int(self.password_length_slider.get()),
                                                           characters=self.get_characters()))
+        return self.a
 
     def change_frame(self, name):
         self.home_button.configure(
@@ -250,11 +248,11 @@ class App(customtkinter.CTk):
             self.third_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.third_frame.grid_forget()
+            
     # fonction de qui permet d'ajouter les entry username_db password_db et website_db a la basse de donne passwords.db
-
     def put(self):
         self.username = str(self.username_db.get())
-        self.password = str(self.password_db.get())
+        self.password = str(self.entry_password.get())
         self.website = str(self.website_db.get())
         if self.username and self.password and self.password == "":
             return messagebox.showwarning("Attention", "Veuillez choisir les charactères que vous vouler dans votre mot de passe")
@@ -274,54 +272,23 @@ class App(customtkinter.CTk):
 
     def frame_3_button_event(self):
         self.change_frame("frame_3")
-#
+
 # la j'essaie de faire la fonction pour actualiser le textbox des mots de passe / elle fonctionne a moitier
     def reload_text(self):
-        # Open a cursor to execute queries
         c = conn.cursor()
-
-        # Execute a SELECT query to retrieve data from a table
         c.execute("SELECT username, website, password FROM passwords")
-
-        # Fetch all the data from the query result and store it in a variable
         data = c.fetchall()
-
-        # Close the cursor
         c.close()
 
-        # Clear the existing contents of the textbox
         self.textbox.delete('1.0', 'end')
-        
-        # Insert the new data into the textbox
-        
-        
         for row in data:
-                if row[0] == "S":
-                    return messagebox.showwarning("Attention", "Veuillez renseigner une email, un site web et un mot de passe avant de pouvoir les")
-                if row[1] == "":
-                    return messagebox.showwarning("Attention", "Veuillez renseigner une email, un site web et un mot de passe avant de pouvoir les")
-                if row[2] == "":
-                    return messagebox.showwarning("Attention", "Veuillez renseigner une email, un site web et un mot de passe avant de pouvoir les")
-                else:
-                    self.textbox.insert(
-                    tk.END, f"{row[0]}: {row[1]}: ,{row[2]} \n")
-            # for row in data:
-            #     self.textbox.insert('end', str(row[0]) + '\n')
+            self.textbox.insert(tk.END, f"USERNAME = {row[0]}; WEBSITE = {row[1]};  PASSWORD = {row[2]} \n")
 
-        
-    # def reload_text(self):
-    #     self.username = str(self.username_db.get())
-    #     self.password = str(self.password_db.get())
-    #     self.website = str(self.website_db.get())
-    #     for i in range(50):
-    #         conn.commit()
-    #         a = ["self.username,self.password,self.website"]
-    #     # text_var.set()
-    #         # self.textbox.delete("1.0", tk.END)
-            
-    #         self.textbox.insert(tk.END,a)
-
-
+    def remove_item(self):
+        for i in self.textbox:
+            self.textbox.destroy()
+            self.checkbox_list.remove(textbox)
+            return
 
 # lancement
 if __name__ == "__main__":
