@@ -7,11 +7,21 @@ c = conn.cursor()
 
 # Create the table if it doesn't already exist
 c.execute('''CREATE TABLE IF NOT EXISTS passwords
-             (id INTEGER PRIMARY KEY AUTOINCREMENT,
+             (password_id INTEGER PRIMARY KEY,
               username TEXT,
               website TEXT,
               password TEXT,
               created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
+
+
+# c.execute('''CREATE TABLE IF NOT EXISTS passwords
+#              (id INTEGER PRIMARY KEY AUTOINCREMENT,
+#               username TEXT,
+#               website TEXT,
+#               password TEXT,
+#               created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
+
+
 
 # Insert a new password into the database
 # username = ""

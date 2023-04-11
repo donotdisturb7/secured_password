@@ -6,13 +6,14 @@ from tkinter import messagebox
 
 import customtkinter
 from PIL import Image
+
 import password
 
 
 # base de donnée
 conn = sqlite3.connect('passwords.db')
 c = conn.cursor()
-c.execute("SELECT password_id , username, password, website FROM passwords")
+c.execute("SELECT username, password, website FROM passwords")
 results = c.fetchall()
 
 
@@ -185,11 +186,9 @@ class App(customtkinter.CTk):
         self.bt_geenerate = customtkinter.CTkButton(master=self.third_frame, text="Recharger", width=100,
                                                     command=self.reload_text)
         self.bt_geenerate.place(relx=0.3, rely=0.7, anchor=tk.CENTER)
-        
-        #bouton supprimer un mot de passe
-        self.btn_sup = customtkinter.CTkButton(master=self.third_frame, text="Supprimer", width=100,
-                                                    command=self.delete_row)
-        self.btn_sup.place(relx=0.4, rely=0.8, anchor=tk.CENTER)
+        self.bet_geenerate = customtkinter.CTkButton(master=self.third_frame, text="remove", width=100,
+                                                    command=self.remove_item)
+        self.bet_geenerate.place(relx=0.4, rely=0.8, anchor=tk.CENTER)
 
         self.textbox = customtkinter.CTkTextbox(
             master=self.third_frame, width=1200,corner_radius=0,scrollbar_button_color='red')
@@ -201,20 +200,29 @@ class App(customtkinter.CTk):
         self.website_db = customtkinter.CTkEntry(
             master=self.second_frame, width=100)
         self.website_db.place(relx=0.5, rely=0.40)
-       
+
 
         # ce code va inserer dans la textbox les element de la bd result [0] pour username ainsi de suite
         for result in results:
             self.textbox.insert(
-                tk.END, f"{result[0]}: {result[1]}: ,{result[2]}: {result[3]} \n")
+                tk.END, f"{result[0]}: {result[1]}: ,{result[2]} \n")
 
         self.textbox.configure(state="normal")
         
-        self.password_id_entry = customtkinter.CTkEntry(master=self.third_frame)
-        self.password_id_entry.place(relx=0.4, rely=0.60)
+        self.line_entry = customtkinter.CTkEntry(master=self.third_frame)
+        self.line_entry.place(relx=0.4, rely=0.6)
 
         # self.delete_button = customtkinter.CTkButton(master=self.third_frame, text="Delete", command=self.remove_row)
         # self.delete_button.grid(row=2, column=3)
+        import sqlite3
+
+        def delete_row(username):
+            conn = sqlite3.connect('passwords.db')
+            c = conn.cursor()
+            c.execute("DELETE FROM passwords WHERE username=?", (username,))
+            conn.commit()
+            conn.close()
+
 
 
     # le slide pour choisir le nombre de charactere du mdp
@@ -259,12 +267,11 @@ class App(customtkinter.CTk):
             
     # fonction de qui permet d'ajouter les entry username_db password_db et website_db a la basse de donne passwords.db
     def put(self):
-
         self.username = str(self.username_db.get())
         self.password = str(self.entry_password.get())
         self.website = str(self.website_db.get())
-        if self.username  == "" :
-            return messagebox.showwarning("Attention", "Vous ne pouvez pas enregister de mot de passe sans un username")
+        if self.username and self.password and self.password == "":
+            return messagebox.showwarning("Attention", "Veuillez choisir les charactères que vous vouler dans votre mot de passe")
         else:
             c.execute("INSERT INTO passwords (username, website, password) VALUES (?, ?, ?)",
                     (self.username, self.website, self.password))
@@ -281,38 +288,14 @@ class App(customtkinter.CTk):
 
     def frame_3_button_event(self):
         self.change_frame("frame_3")
-        
-        
-    #foncton actualiser textbox
+
+# la j'essaie de faire la fonction pour actualiser le textbox des mots de passe / elle fonctionne a moitier
     def reload_text(self):
         c = conn.cursor()
-        c.execute("SELECT password_id, username, website, password FROM passwords")
+        c.execute("SELECT username, website, password FROM passwords")
         data = c.fetchall()
         c.close()
 
         self.textbox.delete('1.0', 'end')
         for row in data:
-            self.textbox.insert(tk.END, f"ID = {row[0]}; USERNAME = {row[1]}; WEBSITE = {row[2]};  PASSWORD = {row[3]} \n")
-            
-    
-        
-    def delete_row(self):
-
-        self.username = self.username_entry.get()
-        
-        conn = sqlite3.connect('passwords.db')
-        c = conn.cursor()
-        c.execute("SELECT * FROM passwords WHERE username=?", (self.username,))
-        row = c.fetchone()
-        if row:
-            c.execute("DELETE FROM passwords WHERE username=?", (self.username,))
-            conn.commit()
-        else:
-            messagebox.showwarning("Username not found", "L'username '{}' n'a pas été trouvé dans la base de donné.".format(self.username))
-        conn.close()
-            
-
-# lancement
-if __name__ == "__main__":
-    app = App()
-    app.mainloop()
+            self.textbox.insert(tk.END, f"USERNAME = {row[0]}; WEBSITE = {row[1]};  PASSWORD = {row[2]} \n")
