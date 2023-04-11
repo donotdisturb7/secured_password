@@ -133,7 +133,7 @@ class App(customtkinter.CTk):
 
         self.entry_password.place(relx=0.5, rely=0.1, anchor=tk.CENTER)
 
-        self.btn_generate = customtkinter.CTkButton(master=self.second_frame, text="Generer", width=100,
+        self.btn_generate = customtkinter.CTkButton(master=self.second_frame, text="Generer un mot de passe", width=100,
                                                     command=self.set_password)
         self.btn_generate.place(relx=0.2, rely=0.5, anchor=tk.CENTER)
 
@@ -141,7 +141,7 @@ class App(customtkinter.CTk):
                                                               number_of_steps=30,
                                                               command=self.slider_event)
 
-        self.password_length_slider.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        self.password_length_slider.place(relx=0.50, rely=0.18, anchor=tk.CENTER)
 
         self.password_length_entry = customtkinter.CTkEntry(
             master=self.second_frame, width=50)
