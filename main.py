@@ -133,7 +133,7 @@ class App(customtkinter.CTk):
 
         self.entry_password.place(relx=0.5, rely=0.1, anchor=tk.CENTER)
 
-        self.btn_generate = customtkinter.CTkButton(master=self.second_frame, text="Generer", width=100,
+        self.btn_generate = customtkinter.CTkButton(master=self.second_frame, text="Generer un mot de passe", width=100,
                                                     command=self.set_password)
         self.btn_generate.place(relx=0.2, rely=0.5, anchor=tk.CENTER)
 
@@ -141,7 +141,7 @@ class App(customtkinter.CTk):
                                                               number_of_steps=30,
                                                               command=self.slider_event)
 
-        self.password_length_slider.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        self.password_length_slider.place(relx=0.50, rely=0.18, anchor=tk.CENTER)
 
         self.password_length_entry = customtkinter.CTkEntry(
             master=self.second_frame, width=50)
@@ -177,17 +177,17 @@ class App(customtkinter.CTk):
         self.change_frame("home")
 
         # bouton ajouter la bd dans la textbox
-        self.btn_geenerate = customtkinter.CTkButton(master=self.second_frame, text="Enregistrer", width=100,
+        self.btn_geenerate = customtkinter.CTkButton(master=self.second_frame, text="Enregistrer le mot de passe", width=100,
                                                      command=self.put)
         self.btn_geenerate.place(relx=0.2, rely=0.7, anchor=tk.CENTER)
 
         # bouton actualiser
-        self.bt_geenerate = customtkinter.CTkButton(master=self.third_frame, text="Recharger", width=100,
+        self.bt_geenerate = customtkinter.CTkButton(master=self.third_frame, text="Actualiser la liste des mots de passse", width=100,
                                                     command=self.reload_text)
         self.bt_geenerate.place(relx=0.3, rely=0.7, anchor=tk.CENTER)
         
         #bouton supprimer un mot de passe
-        self.btn_sup = customtkinter.CTkButton(master=self.third_frame, text="Supprimer", width=100,
+        self.btn_sup = customtkinter.CTkButton(master=self.third_frame, text="Supprimer le mot de passe", width=100,
                                                     command=self.delete_row)
         self.btn_sup.place(relx=0.4, rely=0.8, anchor=tk.CENTER)
 
@@ -213,8 +213,6 @@ class App(customtkinter.CTk):
         self.password_id_entry = customtkinter.CTkEntry(master=self.third_frame)
         self.password_id_entry.place(relx=0.4, rely=0.60)
 
-        # self.delete_button = customtkinter.CTkButton(master=self.third_frame, text="Delete", command=self.remove_row)
-        # self.delete_button.grid(row=2, column=3)
 
 
     # le slide pour choisir le nombre de charactere du mdp
@@ -298,17 +296,21 @@ class App(customtkinter.CTk):
         
     def delete_row(self):
 
-        self.username = self.username_entry.get()
+        self.id = self.password_id_entry.get()
         
         conn = sqlite3.connect('passwords.db')
         c = conn.cursor()
-        c.execute("SELECT * FROM passwords WHERE username=?", (self.username,))
+        c.execute("SELECT * FROM passwords WHERE password_id=?", (self.id,))
         row = c.fetchone()
         if row:
-            c.execute("DELETE FROM passwords WHERE username=?", (self.username,))
+            c.execute("DELETE FROM passwords WHERE password_id=?", (self.id,))
             conn.commit()
+            messagebox.showwarning("Succès", "Le mot de passe contenant l'id '{}' a été supprimer avec succès.".format(self.id))
+            conn.close()
+            
+            
         else:
-            messagebox.showwarning("Username not found", "L'username '{}' n'a pas été trouvé dans la base de donné.".format(self.username))
+            messagebox.showwarning("Id non trouvé", "L'id '{}' n'a pas été trouvé dans la base de donné.".format(self.id))
         conn.close()
             
 
