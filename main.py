@@ -1,11 +1,20 @@
 import os
 import tkinter as tk
 from string import ascii_lowercase, ascii_uppercase, digits, punctuation
+import sqlite3
+from tkinter import messagebox
 
 import customtkinter
 from PIL import Image
-
 import password
+
+
+# base de donnée
+conn = sqlite3.connect('passwords.db')
+c = conn.cursor()
+c.execute("SELECT password_id , username, password, website FROM passwords")
+results = c.fetchall()
+
 
 customtkinter.set_appearance_mode("Dark")
 
@@ -25,23 +34,28 @@ class App(customtkinter.CTk):
         self.grid_columnconfigure(1, weight=1)
 
         # images
-        image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets")
-        self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "secure.png")), size=(26, 26))
+        image_path = os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), "assets")
+        self.logo_image = customtkinter.CTkImage(Image.open(
+            os.path.join(image_path, "secure.png")), size=(26, 26))
         self.large_test_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "large_test_image.png")),
                                                        size=(500, 150))
         self.image_icon_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "image_icon_light.png")),
                                                        size=(20, 20))
         self.home_image = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "home_dark.png")),
-                                                 dark_image=Image.open(os.path.join(image_path, "home_light.png")),
+                                                 dark_image=Image.open(os.path.join(
+                                                     image_path, "home_light.png")),
                                                  size=(20, 20))
         self.chat_image = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "gen.png")),
-                                                 dark_image=Image.open(os.path.join(image_path, "gen2.png")),
+                                                 dark_image=Image.open(
+                                                     os.path.join(image_path, "gen2.png")),
                                                  size=(20, 20))
         self.add_user_image = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "mdp.png")),
-                                                     dark_image=Image.open(os.path.join(image_path, "mdp.png")),
+                                                     dark_image=Image.open(
+                                                         os.path.join(image_path, "mdp.png")),
                                                      size=(20, 20))
 
-        # menu navigation 
+        # menu navigation
         self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
         self.navigation_frame.grid(row=0, column=0, sticky="nsew")
         self.navigation_frame.grid_rowconfigure(4, weight=1)
@@ -55,14 +69,16 @@ class App(customtkinter.CTk):
         self.home_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40, border_spacing=10,
                                                    text="Home",
                                                    fg_color="transparent", text_color=("gray10", "gray90"),
-                                                   hover_color=("gray70", "gray30"),
+                                                   hover_color=(
+                                                       "gray70", "gray30"),
                                                    image=self.home_image, anchor="w", command=self.home_button_event)
         self.home_button.grid(row=1, column=0, sticky="ew")
 
         self.frame_2_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                       border_spacing=10, text="Générer un Mot de passe",
                                                       fg_color="transparent", text_color=("gray10", "gray90"),
-                                                      hover_color=("gray70", "gray30"),
+                                                      hover_color=(
+                                                          "gray70", "gray30"),
                                                       image=self.chat_image, anchor="w",
                                                       command=self.frame_2_button_event)
         self.frame_2_button.grid(row=2, column=0, sticky="ew")
@@ -70,26 +86,32 @@ class App(customtkinter.CTk):
         self.frame_3_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                       border_spacing=10, text="Mes mots de passes",
                                                       fg_color="transparent", text_color=("gray10", "gray90"),
-                                                      hover_color=("gray70", "gray30"),
+                                                      hover_color=(
+                                                          "gray70", "gray30"),
                                                       image=self.add_user_image, anchor="w",
                                                       command=self.frame_3_button_event)
         self.frame_3_button.grid(row=3, column=0, sticky="ew")
 
         # menu pour changer de thème
         self.appearance_mode_menu = customtkinter.CTkOptionMenu(self.navigation_frame,
-                                                                values=["Dark", "Light", "System"],
+                                                                values=[
+                                                                    "Dark", "Light", "System"],
                                                                 command=change_theme)
-        self.appearance_mode_menu.grid(row=6, column=0, padx=20, pady=20, sticky="s")
+        self.appearance_mode_menu.grid(
+            row=6, column=0, padx=20, pady=20, sticky="s")
 
         # creation de la frame home
-        self.home_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.home_frame = customtkinter.CTkFrame(
+            self, corner_radius=0, fg_color="transparent")
         self.home_frame.grid_columnconfigure(0, weight=1)
 
         self.home_frame_large_image_label = customtkinter.CTkLabel(self.home_frame, text="",
                                                                    image=self.large_test_image)
-        self.home_frame_large_image_label.grid(row=0, column=0, padx=20, pady=10)
+        self.home_frame_large_image_label.grid(
+            row=0, column=0, padx=20, pady=10)
 
-        self.home_frame_button_1 = customtkinter.CTkButton(self.home_frame, text="", image=self.image_icon_image)
+        self.home_frame_button_1 = customtkinter.CTkButton(
+            self.home_frame, text="", image=self.image_icon_image)
         self.home_frame_button_1.grid(row=1, column=0, padx=20, pady=10)
         self.home_frame_button_2 = customtkinter.CTkButton(self.home_frame, text="CTkButton",
                                                            image=self.image_icon_image, compound="right")
@@ -102,10 +124,12 @@ class App(customtkinter.CTk):
         self.home_frame_button_4.grid(row=4, column=0, padx=20, pady=10)
 
         # creation de la frame2
-        self.second_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.second_frame = customtkinter.CTkFrame(
+            self, corner_radius=0, fg_color="transparent")
         self.second_frame.grid_columnconfigure(0, weight=1)
 
-        self.entry_password = customtkinter.CTkEntry(master=self.second_frame, width=300)
+        self.entry_password = customtkinter.CTkEntry(
+            master=self.second_frame, width=300)
 
         self.entry_password.place(relx=0.5, rely=0.1, anchor=tk.CENTER)
 
@@ -119,7 +143,8 @@ class App(customtkinter.CTk):
 
         self.password_length_slider.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-        self.password_length_entry = customtkinter.CTkEntry(master=self.second_frame, width=50)
+        self.password_length_entry = customtkinter.CTkEntry(
+            master=self.second_frame, width=50)
 
         self.password_length_entry.place(relx=0.1, rely=0.1, anchor=tk.CENTER)
 
@@ -145,10 +170,54 @@ class App(customtkinter.CTk):
         self.cb_symbols.grid(row=2, column=3)
 
         # creation de la frame3
-        self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.third_frame = customtkinter.CTkFrame(
+            self, corner_radius=0, fg_color="transparent")
 
         # frame par défaut
         self.change_frame("home")
+
+        # bouton ajouter la bd dans la textbox
+        self.btn_geenerate = customtkinter.CTkButton(master=self.second_frame, text="Enregistrer", width=100,
+                                                     command=self.put)
+        self.btn_geenerate.place(relx=0.2, rely=0.7, anchor=tk.CENTER)
+
+        # bouton actualiser
+        self.bt_geenerate = customtkinter.CTkButton(master=self.third_frame, text="Recharger", width=100,
+                                                    command=self.reload_text)
+        self.bt_geenerate.place(relx=0.3, rely=0.7, anchor=tk.CENTER)
+        
+        #bouton supprimer un mot de passe
+        self.btn_sup = customtkinter.CTkButton(master=self.third_frame, text="Supprimer", width=100,
+                                                    command=self.delete_row)
+        self.btn_sup.place(relx=0.4, rely=0.8, anchor=tk.CENTER)
+
+        self.textbox = customtkinter.CTkTextbox(
+            master=self.third_frame, width=1200,corner_radius=0,scrollbar_button_color='red')
+        self.textbox.grid(row=1, column=2, sticky="nsew")
+
+        self.username_db = customtkinter.CTkEntry(
+            master=self.second_frame, width=100)
+        self.username_db.place(relx=0.5, rely=0.20)
+        self.website_db = customtkinter.CTkEntry(
+            master=self.second_frame, width=100)
+        self.website_db.place(relx=0.5, rely=0.40)
+       
+
+        # ce code va inserer dans la textbox les element de la bd result [0] pour username ainsi de suite
+        for result in results:
+            self.textbox.insert(
+                tk.END, f"{result[0]}: {result[1]}: ,{result[2]}: {result[3]} \n")
+
+        self.textbox.configure(state="normal")
+        
+        self.password_id_entry = customtkinter.CTkEntry(master=self.third_frame)
+        self.password_id_entry.place(relx=0.4, rely=0.60)
+
+        # self.delete_button = customtkinter.CTkButton(master=self.third_frame, text="Delete", command=self.remove_row)
+        # self.delete_button.grid(row=2, column=3)
+
+
+    # le slide pour choisir le nombre de charactere du mdp
 
     def slider_event(self, value):
         self.password_length_entry.delete(0, 'end')
@@ -162,13 +231,17 @@ class App(customtkinter.CTk):
     def set_password(self):
         "fonction qui va afficher le mot de passe cree avec 'password.py' en prenant la valeur du slider comme length"
         self.entry_password.delete(0, 'end')
-        self.entry_password.insert(0, password.create_new(length=int(self.password_length_slider.get()),
+        self.a = self.entry_password.insert(0, password.create_new(length=int(self.password_length_slider.get()),
                                                           characters=self.get_characters()))
+        return self.a
 
     def change_frame(self, name):
-        self.home_button.configure(fg_color=("gray75", "gray25") if name == "home" else "transparent")
-        self.frame_2_button.configure(fg_color=("gray75", "gray25") if name == "frame_2" else "transparent")
-        self.frame_3_button.configure(fg_color=("gray75", "gray25") if name == "frame_3" else "transparent")
+        self.home_button.configure(
+            fg_color=("gray75", "gray25") if name == "home" else "transparent")
+        self.frame_2_button.configure(
+            fg_color=("gray75", "gray25") if name == "frame_2" else "transparent")
+        self.frame_3_button.configure(
+            fg_color=("gray75", "gray25") if name == "frame_3" else "transparent")
 
         # selection des frames
         if name == "home":
@@ -183,6 +256,22 @@ class App(customtkinter.CTk):
             self.third_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.third_frame.grid_forget()
+            
+    # fonction de qui permet d'ajouter les entry username_db password_db et website_db a la basse de donne passwords.db
+    def put(self):
+
+        self.username = str(self.username_db.get())
+        self.password = str(self.entry_password.get())
+        self.website = str(self.website_db.get())
+        if self.username  == "" :
+            return messagebox.showwarning("Attention", "Vous ne pouvez pas enregister de mot de passe sans un username")
+        else:
+            c.execute("INSERT INTO passwords (username, website, password) VALUES (?, ?, ?)",
+                    (self.username, self.website, self.password))
+            conn.commit()
+            a = c.fetchall()
+            self.textbox.insert(tk.END,a)
+            
 
     def home_button_event(self):
         self.change_frame("home")
@@ -192,7 +281,36 @@ class App(customtkinter.CTk):
 
     def frame_3_button_event(self):
         self.change_frame("frame_3")
+        
+        
+    #foncton actualiser textbox
+    def reload_text(self):
+        c = conn.cursor()
+        c.execute("SELECT password_id, username, website, password FROM passwords")
+        data = c.fetchall()
+        c.close()
 
+        self.textbox.delete('1.0', 'end')
+        for row in data:
+            self.textbox.insert(tk.END, f"ID = {row[0]}; USERNAME = {row[1]}; WEBSITE = {row[2]};  PASSWORD = {row[3]} \n")
+            
+    
+        
+    def delete_row(self):
+
+        self.username = self.username_entry.get()
+        
+        conn = sqlite3.connect('passwords.db')
+        c = conn.cursor()
+        c.execute("SELECT * FROM passwords WHERE username=?", (self.username,))
+        row = c.fetchone()
+        if row:
+            c.execute("DELETE FROM passwords WHERE username=?", (self.username,))
+            conn.commit()
+        else:
+            messagebox.showwarning("Username not found", "L'username '{}' n'a pas été trouvé dans la base de donné.".format(self.username))
+        conn.close()
+            
 
 # lancement
 if __name__ == "__main__":
