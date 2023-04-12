@@ -182,9 +182,13 @@ class App(customtkinter.CTk):
         self.btn_geenerate.place(relx=0.2, rely=0.7, anchor=tk.CENTER)
 
         # bouton actualiser
-        self.bt_geenerate = customtkinter.CTkButton(master=self.third_frame, text="Actualiser la liste des mots de passse", width=100,
+        self.bt_reload = customtkinter.CTkButton(master=self.third_frame, text="Actualiser la liste des mots de passse", width=100,
                                                     command=self.reload_text)
-        self.bt_geenerate.place(relx=0.3, rely=0.7, anchor=tk.CENTER)
+        self.bt_reload.place(relx=0.3, rely=0.7, anchor=tk.CENTER)
+        
+        self.bt_hide = customtkinter.CTkButton(master=self.third_frame, text="Cacher la liste des mots de passe", width=100,
+                                                    command=self.toggle_hide)
+        self.bt_hide.place(relx=0.3, rely=0.9, anchor=tk.CENTER)
         
         #bouton supprimer un mot de passe
         self.btn_sup = customtkinter.CTkButton(master=self.third_frame, text="Supprimer le mot de passe", width=100,
@@ -312,7 +316,21 @@ class App(customtkinter.CTk):
         else:
             messagebox.showwarning("Id non trouvé", "L'id '{}' n'a pas été trouvé dans la base de donné.".format(self.id))
         conn.close()
+        
+    def toggle_hide(self):
+
+        if self.textbox:
             
+            self.textbox.delete("1.0", tk.END)
+            self.textbox.insert(tk.END, hidden_text)
+            self.textbox = False
+        else:
+            hidden_text = textbox.get("1.0", tk.END)
+            self.textbox.delete("1.0", tk.END)
+            self.masked_text = "*" * len(hidden_text)
+            self.textbox.insert(tk.END, masked_text)
+            self.textbox= True
+
 
 # lancement
 if __name__ == "__main__":
