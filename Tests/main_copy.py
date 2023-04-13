@@ -10,9 +10,26 @@ import password
 
 
 # base de donnée
+import sqlite3
+
 conn = sqlite3.connect('passwords.db')
 c = conn.cursor()
-c.execute("SELECT password_id , username, password, website FROM passwords")
+
+
+c.execute('''CREATE TABLE IF NOT EXISTS passwords
+             (password_id INTEGER PRIMARY KEY,
+              username TEXT,
+              website TEXT,
+              password TEXT,
+              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
+
+
+conn.commit()
+
+
+# conn = sqlite3.connect('passwords.db')
+# c = conn.cursor()
+# c.execute("SELECT password_id , username, password, website FROM passwords")
 results = c.fetchall()
 
 
@@ -131,7 +148,7 @@ class App(customtkinter.CTk):
         self.entry_password = customtkinter.CTkEntry(
             master=self.second_frame, width=300)
 
-        self.entry_password.place(relx=0.5, rely=0.1, anchor=tk.CENTER)
+        self.entry_password.place(relx=0.4, rely=0.1, anchor=tk.CENTER)
 
         self.btn_generate = customtkinter.CTkButton(master=self.second_frame, text="Generer un mot de passe", width=100,
                                                     command=self.set_password)
@@ -179,7 +196,7 @@ class App(customtkinter.CTk):
         # bouton ajouter la bd dans la textbox
         self.btn_geenerate = customtkinter.CTkButton(master=self.second_frame, text="Enregistrer le mot de passe", width=100,
                                                      command=self.put)
-        self.btn_geenerate.place(relx=0.2, rely=0.7, anchor=tk.CENTER)
+        self.btn_geenerate.place(relx=0.8, rely=0.1, anchor=tk.CENTER)
 
         # bouton actualiser
         self.bt_reload = customtkinter.CTkButton(master=self.third_frame, text="Actualiser la liste des mots de passse", width=100,
@@ -206,7 +223,7 @@ class App(customtkinter.CTk):
         self.username_db.place(relx=0.5, rely=0.20)
         self.website_db = customtkinter.CTkEntry(
             master=self.second_frame, width=100)
-        self.website_db.place(relx=0.5, rely=0.40)
+        self.website_db.place(relx=0.6, rely=0.40)
         
         
         self.text_inserer =  tk.StringVar(value="Inserez l'Id du mot de passe que vous voulez supprimer")
@@ -216,20 +233,21 @@ class App(customtkinter.CTk):
         
         self.text_website =  tk.StringVar(value="Inserez le site auquelle votre mot de passe appartient (non obligatoire)")
         self.label_1 = customtkinter.CTkLabel(master=self.second_frame,textvariable=self.text_website,width=120,
-                               height=1,    font=customtkinter.CTkFont("Helvetica", -9))
-        self.label_1.place(relx=0.01, rely=0.65)
+                               height=1,    font=customtkinter.CTkFont("Helvetica", -10))
+        self.label_1.place(relx=0.01, rely=0.41)
         
         self.text_username =  tk.StringVar(value="Inserez un username")
         self.label_1 = customtkinter.CTkLabel(master=self.second_frame,textvariable=self.text_username,width=120,
-                               height=1,    font=customtkinter.CTkFont("Helvetica", -9))
-        self.label_1.place(relx=0.01, rely=0.62)
+                               height=1,    font=customtkinter.CTkFont("Helvetica", -12))
+        self.label_1.place(relx=0.25, rely=0.22)
         
        
 
         # ce code va inserer dans la textbox les element de la bd result [0] pour username ainsi de suite
-        for result in results:
-            self.textbox.insert(
-                tk.END, f"{result[0]}: {result[1]}: ,{result[2]}: {result[3]} \n")
+        # for result in results:
+        #     # self.textbox.insert(
+        #     #     tk.END, f"{result[0]}: {result[1]}: ,{result[2]}: {result[3]} \n")
+        #     self.textbox.insert(tk.END, f"ID = {result[0]}; USERNAME = {result[1]}; WEBSITE = {result[2]};  PASSWORD = {result[3]} \n")
 
         self.textbox.configure(state="normal")
         
