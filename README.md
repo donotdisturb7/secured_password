@@ -15,9 +15,12 @@ The project is a password manager designed to provide secure and convenient pass
 ## Screenshots
 
 ![App Screenshot]
-<img src="Screenshots/2023-04-13-131811_1108x635_scrot.png" >
-<img src="Screenshots/2023-04-13-131837_1018x666_scrot.png" >
-<img src="Screenshots/2023-04-13-131847_1020x655_scrot.png" >
+<img src="Screenshots/2023-04-13-133230_1068x657_scrot.png" >
+<img src="Screenshots/2023-04-13-133253_845x579_scrot.png" >
+<img src="Screenshots/2023-04-13-133301_1114x671_scrot.png" >
+<img src="Screenshots/2023-04-13-133312_1127x682_scrot.png" >
+
+
 
 
 

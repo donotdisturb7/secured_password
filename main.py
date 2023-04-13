@@ -227,17 +227,17 @@ class App(customtkinter.CTk):
         self.website_db.place(relx=0.6, rely=0.40)
         
         
-        self.text_inserer =  tk.StringVar(value="Inserez l'Id du mot de passe que vous voulez supprimer")
+        self.text_inserer =  tk.StringVar(value="Inserer l'Id du mot de passe que vous voulez supprimer")
         self.label_1 = customtkinter.CTkLabel(master=self.third_frame,textvariable=self.text_inserer,width=120,
                                height=1,    font=customtkinter.CTkFont("Helvetica", -9))
         self.label_1.place(relx=0.01, rely=0.62)
         
-        self.text_website =  tk.StringVar(value="Inserez le site auquelle votre mot de passe appartient (non obligatoire)")
+        self.text_website =  tk.StringVar(value="Inserer le site auquelle votre mot de passe appartient (non obligatoire)")
         self.label_1 = customtkinter.CTkLabel(master=self.second_frame,textvariable=self.text_website,width=120,
                                height=1,    font=customtkinter.CTkFont("Helvetica", -10))
         self.label_1.place(relx=0.01, rely=0.41)
         
-        self.text_username =  tk.StringVar(value="Inserez un username")
+        self.text_username =  tk.StringVar(value="Inserer un username")
         self.label_1 = customtkinter.CTkLabel(master=self.second_frame,textvariable=self.text_username,width=120,
                                height=1,    font=customtkinter.CTkFont("Helvetica", -12))
         self.label_1.place(relx=0.25, rely=0.22)
@@ -347,7 +347,7 @@ class App(customtkinter.CTk):
         if row:
             c.execute("DELETE FROM passwords WHERE password_id=?", (self.id,))
             conn.commit()
-            messagebox.showwarning("Succès", "Le mot de passe contenant l'id '{}' a été supprimer avec succès.".format(self.id))
+            messagebox.showwarning("Succès", "Le mot de passe contenant l'id '{}' a été supprimé avec succès.".format(self.id))
             conn.close()
             
             
