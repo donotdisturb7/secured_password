@@ -14,7 +14,15 @@ The project is a password manager designed to provide secure and convenient pass
 
 ## Screenshots
 
-![App Screenshot](/home/donotdisturb/Learning/secured_password/Screenshots/2023-04-13-131847_1020x655_scrot.png)
+![App Screenshot]
+<img src="Screenshots/2023-04-13-131811_1108x635_scrot.png" >
+<img src="Screenshots/2023-04-13-131837_1018x666_scrot.png" >
+<img src="Screenshots/2023-04-13-131847_1020x655_scrot.png" >
+
+
+
+
+
 
 
 ## 🛠 Skills
