@@ -28,7 +28,7 @@ class App(customtkinter.CTk):
         super().__init__()
 
         self.title("secured password")
-        self.geometry("700x550")
+        self.geometry("800x550")
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -184,19 +184,21 @@ class App(customtkinter.CTk):
         # bouton actualiser
         self.bt_reload = customtkinter.CTkButton(master=self.third_frame, text="Actualiser la liste des mots de passse", width=100,
                                                     command=self.reload_text)
-        self.bt_reload.place(relx=0.3, rely=0.7, anchor=tk.CENTER)
+        self.bt_reload.place(relx=0.49, rely=0.4, anchor=tk.CENTER)
         
+        
+        # bouton cacher la liste de mot de passe
         self.bt_hide = customtkinter.CTkButton(master=self.third_frame, text="Cacher la liste des mots de passe", width=100,
                                                     command=self.toggle_hide)
-        self.bt_hide.place(relx=0.3, rely=0.9, anchor=tk.CENTER)
+        self.bt_hide.place(relx=0.49, rely=0.49, anchor=tk.CENTER)
         
         #bouton supprimer un mot de passe
-        self.btn_sup = customtkinter.CTkButton(master=self.third_frame, text="Supprimer le mot de passe", width=100,
+        self.btn_sup = customtkinter.CTkButton(master=self.third_frame, text="Supprimer le mot de passe ",
                                                     command=self.delete_row)
-        self.btn_sup.place(relx=0.4, rely=0.8, anchor=tk.CENTER)
+        self.btn_sup.place(relx=0.85, rely=0.7, anchor=tk.CENTER)
 
         self.textbox = customtkinter.CTkTextbox(
-            master=self.third_frame, width=1200,corner_radius=0,scrollbar_button_color='red')
+            master=self.third_frame, width=1200,corner_radius=5, border_width=1,scrollbar_button_color='red')
         self.textbox.grid(row=1, column=2, sticky="nsew")
 
         self.username_db = customtkinter.CTkEntry(
@@ -205,6 +207,23 @@ class App(customtkinter.CTk):
         self.website_db = customtkinter.CTkEntry(
             master=self.second_frame, width=100)
         self.website_db.place(relx=0.5, rely=0.40)
+        
+        
+        self.text_inserer =  tk.StringVar(value="Inserez l'Id du mot de passe que vous voulez supprimer")
+        self.label_1 = customtkinter.CTkLabel(master=self.third_frame,textvariable=self.text_inserer,width=120,
+                               height=1,    font=customtkinter.CTkFont("Helvetica", -9))
+        self.label_1.place(relx=0.01, rely=0.62)
+        
+        self.text_website =  tk.StringVar(value="Inserez le site auquelle votre mot de passe appartient (non obligatoire)")
+        self.label_1 = customtkinter.CTkLabel(master=self.second_frame,textvariable=self.text_website,width=120,
+                               height=1,    font=customtkinter.CTkFont("Helvetica", -9))
+        self.label_1.place(relx=0.01, rely=0.65)
+        
+        self.text_username =  tk.StringVar(value="Inserez un username")
+        self.label_1 = customtkinter.CTkLabel(master=self.second_frame,textvariable=self.text_username,width=120,
+                               height=1,    font=customtkinter.CTkFont("Helvetica", -9))
+        self.label_1.place(relx=0.01, rely=0.62)
+        
        
 
         # ce code va inserer dans la textbox les element de la bd result [0] pour username ainsi de suite
@@ -233,9 +252,9 @@ class App(customtkinter.CTk):
     def set_password(self):
         "fonction qui va afficher le mot de passe cree avec 'password.py' en prenant la valeur du slider comme length"
         self.entry_password.delete(0, 'end')
-        self.a = self.entry_password.insert(0, password.create_new(length=int(self.password_length_slider.get()),
+        return self.entry_password.insert(0, password.create_new(length=int(self.password_length_slider.get()),
                                                           characters=self.get_characters()))
-        return self.a
+        
 
     def change_frame(self, name):
         self.home_button.configure(
@@ -265,8 +284,8 @@ class App(customtkinter.CTk):
         self.username = str(self.username_db.get())
         self.password = str(self.entry_password.get())
         self.website = str(self.website_db.get())
-        if self.username  == "" :
-            return messagebox.showwarning("Attention", "Vous ne pouvez pas enregister de mot de passe sans un username")
+        if len(self.username) == 0 or len(self.password) == 0 :
+            return messagebox.showwarning("Attention", "Vous devez d'abord generer un mot de passe et inserer un username afin de pouvoir enregistrer votre mot de passe ")
         else:
             c.execute("INSERT INTO passwords (username, website, password) VALUES (?, ?, ?)",
                     (self.username, self.website, self.password))
