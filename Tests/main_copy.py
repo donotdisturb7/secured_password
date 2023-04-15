@@ -8,7 +8,6 @@ from string import ascii_lowercase, ascii_uppercase, digits, punctuation
 from tkinter import messagebox
 from PIL import Image
 
-
 # base de donnée
 import sqlite3
 
