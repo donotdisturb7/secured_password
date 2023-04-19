@@ -2,7 +2,7 @@ import secrets
 from tkinter import messagebox
 
 
-def create_new(length, characters):
+def cree_password(length, characters):
     "fonction de generation d'un mot de passe aléatoire "
     if characters == "":
         messagebox.showwarning("Attention", "Veuillez choisir les charactères que vous vouler dans votre mot de passe")
