@@ -1,4 +1,2 @@
 customtkinter
-Pillow
-tkinter
-tk
+Pillow==8.4.0
